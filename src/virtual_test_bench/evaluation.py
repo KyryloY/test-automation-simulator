@@ -13,10 +13,11 @@ class MeasurementResult:
     verdict: Verdict
     reason: str
     effective_limits: Limits
+    attempts: int = 1
 
 
-def inconclusive_measurement(quantity: str, unit: str, reason: str, limits: Limits) -> MeasurementResult:
-    return MeasurementResult(quantity, unit, (), None, Verdict.INCONCLUSIVE, reason, limits)
+def inconclusive_measurement(quantity: str, unit: str, reason: str, limits: Limits, attempts: int = 1) -> MeasurementResult:
+    return MeasurementResult(quantity, unit, (), None, Verdict.INCONCLUSIVE, reason, limits, attempts)
 
 
 def evaluate_measurement(quantity: str, unit: str, readings: list[float], limits: Limits, guard_band_w: float) -> MeasurementResult:

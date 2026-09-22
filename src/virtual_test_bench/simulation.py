@@ -5,7 +5,7 @@ from .errors import InstrumentTimeout
 
 class _Resource:
     def __init__(self, bench: "SimulatedBench", name: str) -> None:
-        self.bench, self.name, self.errors = bench, name, []
+        self.bench, self.name, self.errors, self.closed = bench, name, [], False
 
     def write(self, command: str) -> None:
         parts = command.strip().split()
@@ -34,16 +34,20 @@ class _Resource:
             return f"{self.bench.power_w * factor * warmup + offset + self.bench.random.uniform(-0.2, 0.2):.6f}"
         self.errors.append('-113,"Undefined header"'); return ""
 
-    def close(self) -> None: pass
+    def close(self) -> None: self.closed = True
 
 
 class _Manager:
     def __init__(self, bench: "SimulatedBench") -> None: self.bench = bench
-    def open_resource(self, name: str) -> _Resource: return _Resource(self.bench, name)
+    def open_resource(self, name: str) -> _Resource:
+        resource = _Resource(self.bench, name)
+        self.bench.resources.append(resource)
+        return resource
 
 
 class SimulatedBench:
     def __init__(self, seed: int, profile: str = "nominal") -> None:
         self.random, self.profile = random.Random(seed), profile
         self.frequency_hz, self.power_w, self.output_on, self.reading_count = 0.0, 0.0, False, 0
+        self.resources = []
         self.manager = _Manager(self)

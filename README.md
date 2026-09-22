@@ -23,6 +23,14 @@ uv run --with pytest pytest -q
 ```
 
 `power_low` yields a valid out-of-tolerance `FAIL`; `meter_timeout` yields `INCONCLUSIVE`, deliberately distinct from an out-of-spec measurement.
+## Example reports
+
+The following committed outputs use the nominal plan and seed `42`, so they are
+reproducible with the commands above:
+
+- [PASS — nominal bench](docs/examples/pass.md)
+- [FAIL — low forward power](docs/examples/fail.md)
+- [INCONCLUSIVE — meter timeout after retries](docs/examples/inconclusive.md)
 
 ## Scope
 

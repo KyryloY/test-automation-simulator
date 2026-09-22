@@ -32,14 +32,16 @@ def run_plan(plan: TestPlan, seed: int, profile: str) -> RunResult:
     results = []
     try:
         for quantity, reader, limits in (("forward_power", meter.measure_forward_power_w, plan.forward_power_w), ("reflected_power", meter.measure_reflected_power_w, plan.reflected_power_w)):
+            attempt_records = []
             for attempt in range(1, plan.retries + 2):
                 try:
                     readings = [reader() for _ in range(plan.readings)]
                     results.append(evaluate_measurement(quantity, "W", readings, limits, plan.guard_band_w))
                     break
                 except (InstrumentTimeout, MalformedResponse) as error:
+                    attempt_records.append({"attempt": attempt, "readings": [], "error": str(error)})
                     if attempt == plan.retries + 1:
-                        results.append(inconclusive_measurement(quantity, "W", f"{error} after {attempt} attempts", limits, attempt))
+                        results.append(inconclusive_measurement(quantity, "W", f"{error} after {attempt} attempts", limits, attempt, tuple(attempt_records)))
     finally:
         generator.disable_output()
         generator.resource.close()

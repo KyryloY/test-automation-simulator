@@ -51,4 +51,5 @@ class SimulatedBench:
         self.random, self.profile = random.Random(seed), profile
         self.frequency_hz, self.power_w, self.output_on, self.reading_count = 0.0, 0.0, False, 0
         self.resources = []
+        self.simulation_config = {"seed": seed, "profile": profile, "noise_w": 0.2, "systematic_offset_w": 2.0 if profile == "meter_offset" else 0.0, "load_mismatch_coefficient": 0.10 if profile == "load_mismatch" else 0.02}
         self.manager = _Manager(self)

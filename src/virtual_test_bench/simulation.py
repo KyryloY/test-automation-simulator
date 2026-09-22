@@ -22,9 +22,16 @@ class _Resource:
         if self.name.endswith("POWERMETER::INSTR") and command.upper() in {"MEAS:POW?", "MEAS:REFL?"}:
             if self.bench.profile == "meter_timeout": raise InstrumentTimeout("simulated meter timeout")
             if self.bench.profile == "malformed_reply": return "not-a-number"
-            if command.upper() == "MEAS:REFL?": return f"{self.bench.power_w * 0.02:.6f}"
+            if command.upper() == "MEAS:REFL?":
+                reflected = self.bench.power_w * (0.10 if self.bench.profile == "load_mismatch" else 0.02)
+                if reflected > 5:
+                    self.bench.output_on = False
+                return f"{reflected:.6f}"
             factor = 0.90 if self.bench.profile == "power_low" else 1.0
-            return f"{self.bench.power_w * factor + self.bench.random.uniform(-0.2, 0.2):.6f}"
+            warmup = 0.80 + 0.10 * min(self.bench.reading_count, 2) if self.bench.profile == "warmup" else 1.0
+            self.bench.reading_count += 1
+            offset = 2.0 if self.bench.profile == "meter_offset" else 0.0
+            return f"{self.bench.power_w * factor * warmup + offset + self.bench.random.uniform(-0.2, 0.2):.6f}"
         self.errors.append('-113,"Undefined header"'); return ""
 
     def close(self) -> None: pass
@@ -38,5 +45,5 @@ class _Manager:
 class SimulatedBench:
     def __init__(self, seed: int, profile: str = "nominal") -> None:
         self.random, self.profile = random.Random(seed), profile
-        self.frequency_hz, self.power_w, self.output_on = 0.0, 0.0, False
+        self.frequency_hz, self.power_w, self.output_on, self.reading_count = 0.0, 0.0, False, 0
         self.manager = _Manager(self)

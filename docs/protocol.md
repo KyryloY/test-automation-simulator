@@ -13,4 +13,4 @@ This local command subset is an educational analogue, not SCPI or VISA complianc
 | `MEAS:REFL?` | meter | synthetic reflected power in W |
 | `SYST:ERR?` | either | FIFO error entry or `0,"No error"` |
 
-Fault profiles are deterministic for a given seed: `nominal`, `power_low`, `meter_timeout`, and `malformed_reply`.
+Fault/control profiles are deterministic for a given seed: `nominal`, `power_low`, `meter_timeout`, `malformed_reply`, `meter_offset` (+2 W synthetic offset), `warmup` (synthetic rise over readings), and `load_mismatch` (high reflected power and virtual interlock). These are software-model behaviours, not physical or safety claims.

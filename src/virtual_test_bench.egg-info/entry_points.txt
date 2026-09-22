@@ -1,0 +1,2 @@
+[console_scripts]
+virtual-test-bench = virtual_test_bench.cli:main

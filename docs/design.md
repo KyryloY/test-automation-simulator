@@ -85,7 +85,7 @@ malformed numeric response into an I/O diagnostic, not a measurement failure.
 
 ## 5. Test-plan schema and evaluation
 
-A version-1 plan is a JSON or YAML object with:
+A version-1 plan is a JSON object with:
 
 ```yaml
 id: rf-output-power-at-nominal-load

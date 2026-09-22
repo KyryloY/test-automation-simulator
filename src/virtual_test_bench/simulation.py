@@ -21,6 +21,7 @@ class _Resource:
         if command.upper() == "*IDN?": return "VIRTUAL,RF-GENERATOR-1,VG001,0.1" if self.name.endswith("RFGEN::INSTR") else "VIRTUAL,POWER-METER-1,PM001,0.1"
         if self.name.endswith("POWERMETER::INSTR") and command.upper() in {"MEAS:POW?", "MEAS:REFL?"}:
             if self.bench.profile == "meter_timeout": raise InstrumentTimeout("simulated meter timeout")
+            if not self.bench.output_on: raise InstrumentTimeout("virtual interlock latched")
             if self.bench.profile == "malformed_reply": return "not-a-number"
             if command.upper() == "MEAS:REFL?":
                 reflected = self.bench.power_w * (0.10 if self.bench.profile == "load_mismatch" else 0.02)

@@ -8,6 +8,7 @@ from .runner import RunResult
 def write_reports(result: RunResult, output_dir: Path) -> tuple[Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     payload = {"plan": asdict(result.plan), "seed": result.seed, "profile": result.profile,
+               "started_at": result.started_at, "simulation": result.simulation,
                "measurements": [asdict(item) for item in result.measurements]}
     json_path = output_dir / "result.json"
     json_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")

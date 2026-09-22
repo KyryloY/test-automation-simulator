@@ -1,4 +1,5 @@
 import json
+from datetime import UTC, datetime
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -15,6 +16,8 @@ class RunResult:
     seed: int
     profile: str
     measurements: tuple[MeasurementResult, ...]
+    started_at: str
+    simulation: dict[str, object]
 
 
 def load_plan(path: str | Path) -> TestPlan:
@@ -39,4 +42,4 @@ def run_plan(plan: TestPlan, seed: int, profile: str) -> RunResult:
                         results.append(inconclusive_measurement(quantity, "W", f"{error} after {attempt} attempts", limits, attempt))
     finally:
         generator.disable_output()
-    return RunResult(plan, seed, profile, tuple(results))
+    return RunResult(plan, seed, profile, tuple(results), datetime.now(UTC).isoformat().replace("+00:00", "Z"), {"seed": seed, "profile": profile, "noise_w": 0.2, "systematic_offset_w": 0.0, "load_mismatch_coefficient": 0.02})

@@ -28,4 +28,5 @@ class TestPlan:
     @classmethod
     def from_mapping(cls, mapping: dict[str, object]) -> "TestPlan":
         from .testplan import parse_plan
+
         return parse_plan(mapping)

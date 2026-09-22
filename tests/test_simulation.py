@@ -7,7 +7,9 @@ def measure_once(seed: int) -> float:
     generator = GeneratorDriver(bench.manager.open_resource("SIM::RFGEN::INSTR"))
     generator.configure(13_560_000, 100)
     generator.enable_output()
-    return PowerMeterDriver(bench.manager.open_resource("SIM::POWERMETER::INSTR")).measure_forward_power_w()
+    return PowerMeterDriver(
+        bench.manager.open_resource("SIM::POWERMETER::INSTR")
+    ).measure_forward_power_w()
 
 
 def test_same_seed_produces_same_reading():

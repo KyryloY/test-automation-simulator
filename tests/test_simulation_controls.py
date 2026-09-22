@@ -7,7 +7,9 @@ def configured_meter(profile: str):
     generator = GeneratorDriver(bench.manager.open_resource("SIM::RFGEN::INSTR"))
     generator.configure(13_560_000, 100)
     generator.enable_output()
-    return bench, PowerMeterDriver(bench.manager.open_resource("SIM::POWERMETER::INSTR"))
+    return bench, PowerMeterDriver(
+        bench.manager.open_resource("SIM::POWERMETER::INSTR")
+    )
 
 
 def test_offset_profile_shifts_forward_power_reading():

@@ -35,3 +35,9 @@ reproducible with the commands above:
 ## Scope
 
 The virtual generator accepts a documented SCPI-like subset and the virtual power meter reports synthetic forward/reflected-power values. The test runner configures the resources, takes repeated readings, preserves raw data, applies limits/guard bands, and renders reports. See [domain research](docs/domain-research.md), [design](docs/design.md), and [protocol reference](docs/protocol.md).
+
+## Ukrainian guide
+
+For a detailed, beginner-friendly Ukrainian explanation of the architecture,
+test process, simulated-versus-real measurement bench, metrology, and all
+terms, read the [complete Ukrainian guide](docs/guide-uk.md).
